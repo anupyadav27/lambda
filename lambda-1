@@ -1,59 +1,102 @@
 import boto3
 import json
+import logging
 
 # Initialize AWS clients
 s3_client = boto3.client('s3')
 rekognition_client = boto3.client('rekognition')
 bedrock_client = boto3.client('bedrock')
 
+# Set up logging
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+
 def lambda_handler(event, context):
-    # Extract bucket name and object key from the S3 event
-    bucket_name = event['Records'][0]['s3']['bucket']['name']
-    object_key = event['Records'][0]['s3']['object']['key']
-    print(bucket_name, object_key)
+    try:
+        # Extract bucket name and object key from the S3 event
+        bucket_name = event['Records'][0]['s3']['bucket']['name']
+        object_key = event['Records'][0]['s3']['object']['key']
+        logger.info(f"Received event. Bucket: {bucket_name}, Key: {object_key}")
 
-    # Get the image from S3
-    response = s3_client.get_object(Bucket=bucket_name, Key=object_key)
-    image_data = response['Body'].read()
+        # Get the image from S3
+        try:
+            response = s3_client.get_object(Bucket=bucket_name, Key=object_key)
+            image_data = response['Body'].read()
+            logger.info("Successfully retrieved image from S3.")
+        except Exception as e:
+            logger.error(f"Error retrieving image from S3: {e}")
+            raise e
 
-    # Use Rekognition to analyze the image
-    rekognition_response = rekognition_client.detect_labels(
-        Image={'Bytes': image_data},
-        MaxLabels=10,
-        MinConfidence=75
-    )
+        # Use Rekognition to analyze the image
+        try:
+            rekognition_response = rekognition_client.detect_labels(
+                Image={'Bytes': image_data},
+                MaxLabels=10,
+                MinConfidence=75
+            )
+            logger.info("Rekognition analysis completed successfully.")
+        except Exception as e:
+            logger.error(f"Error analyzing image with Rekognition: {e}")
+            raise e
 
-    # Extract labels and confidence levels
-    labels = []
-    for label in rekognition_response['Labels']:
-        labels.append(f"{label['Name']} ({label['Confidence']:.2f}%)")
+        # Extract labels and confidence levels
+        labels = []
+        try:
+            for label in rekognition_response['Labels']:
+                labels.append(f"{label['Name']} ({label['Confidence']:.2f}%)")
+            labels_description = "Detected objects: " + ", ".join(labels)
+            logger.info(f"Labels extracted: {labels_description}")
+        except KeyError as e:
+            logger.error(f"Key error in processing Rekognition response: {e}")
+            raise e
+        except Exception as e:
+            logger.error(f"Unexpected error in processing Rekognition response: {e}")
+            raise e
 
-    # Combine labels into a descriptive string
-    labels_description = "Detected objects: " + ", ".join(labels)
-
-    # Prepare the input payload for the Bedrock model
-    input_payload = {
-        "inputs": {
-            "image_description": labels_description,
-            "text": "What is in this image?"
-        },
-        "model": "anthropic.claude-3-haiku-20240307-v1:0:200k",  # Ensure this is the correct model ID
-        "output": {
-            "type": "text"
+        # Prepare the input payload for the Bedrock model
+        input_payload = {
+            "inputs": {
+                "image_description": labels_description,
+                "text": "What is in this image?"
+            },
+            "model": "anthropic.claude-3-haiku-20240307-v1:0:200k",  # Ensure this is the correct model ID
+            "output": {
+                "type": "text"
+            }
         }
-    }
 
-    # Send the request to the Bedrock model
-    bedrock_response = bedrock_client.invoke_model(
-        modelId='anthropic.claude-3-haiku-20240307-v1:0:200k',  # Replace with the correct model ID
-        contentType='application/json',
-        accept='application/json',
-        body=json.dumps(input_payload)
-    )
+        # Send the request to the Bedrock model
+        try:
+            bedrock_response = bedrock_client.invoke_model(
+                modelId='anthropic.claude-3-haiku-20240307-v1:0:200k',  # Replace with the correct model ID
+                contentType='application/json',
+                accept='application/json',
+                body=json.dumps(input_payload)
+            )
+            logger.info("Successfully invoked the Bedrock model.")
+        except Exception as e:
+            logger.error(f"Error invoking Bedrock model: {e}")
+            raise e
 
-    # Parse the response from the model
-    model_response = json.loads(bedrock_response['body'])
-    return {
-        'statusCode': 200,
-        'body': json.dumps({'response': model_response['text']})
-    }
+        # Parse the response from the model
+        try:
+            model_response = json.loads(bedrock_response['body'])
+            logger.info("Successfully parsed the Bedrock model response.")
+        except KeyError as e:
+            logger.error(f"Key error in processing Bedrock response: {e}")
+            raise e
+        except Exception as e:
+            logger.error(f"Unexpected error in processing Bedrock response: {e}")
+            raise e
+
+        return {
+            'statusCode': 200,
+            'body': json.dumps({'response': model_response['text']})
+        }
+
+    except Exception as e:
+        logger.error(f"Unhandled exception: {e}")
+        return {
+            'statusCode': 500,
+            'body': json.dumps({'error': str(e)})
+        }
