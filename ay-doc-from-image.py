@@ -1,0 +1,70 @@
+import pytesseract
+from PIL import Image
+from langchain.chat_models import ChatOpenAI  # Correct import for ChatOpenAI from langchain
+from langchain.chains import LLMChain
+from langchain.prompts import PromptTemplate
+from decouple import config
+import git
+import os
+import openai
+import requests
+
+# Step 1: Load your image
+image_path = 'image.png'
+img = Image.open(image_path)
+openai_api_key = config('OPENAI_API_KEY')  # Make sure to set this in your environment
+
+# Step 2: Extract text from the image using OCR (Tesseract)
+extracted_text = pytesseract.image_to_string(img)
+print("Extracted Text:", extracted_text)
+
+# Step 3: Use a Git repository as a knowledge base (entire repo)
+repo_url = "https://github.com/awsdocs/aws-doc-sdk-examples.git"
+repo_dir = "./local_repo"
+
+# Clone the repo if it doesn't exist locally
+if not os.path.exists(repo_dir):
+    git.Repo.clone_from(repo_url, repo_dir)
+
+# Function to read all files in the repository
+def read_repo_content(repo_dir):
+    knowledge_base = ""
+    for root, dirs, files in os.walk(repo_dir):
+        for file in files:
+            file_path = os.path.join(root, file)
+            if file.endswith(('.md', '.py', '.txt')):  # Filter by file types if needed
+                try:
+                    with open(file_path, 'r', encoding='utf-8') as f:
+                        knowledge_base += f"\n\n---\n\n{file_path}:\n{f.read()}"
+                except Exception as e:
+                    print(f"Error reading {file_path}: {e}")
+    return knowledge_base
+
+# Read all files in the repository to create the knowledge base
+knowledge_base = read_repo_content(repo_dir)
+
+# Step 4: Provide detailed instructions for the model
+instruction_template = """
+You have extracted the following text from an image: '{text}'.
+Use the following knowledge base for reference:
+{knowledge_base}
+
+Follow these instructions:
+1. Summarize the text briefly.
+2. Highlight any key points.
+3. If the text contains code, provide a brief explanation of what the code does.
+4. Cross-reference the information with the knowledge base provided.
+"""
+
+prompt_template = PromptTemplate(
+    input_variables=["text", "knowledge_base"],
+    template=instruction_template
+)
+
+# Step 5: Use LangChain and GPT-4 to process the text with the knowledge base
+llmm = ChatOpenAI(temperature=0.7, model_name="gpt-4", openai_api_key=openai_api_key)  # Correct usage of ChatOpenAI
+chain = LLMChain(llm=llmm, prompt=prompt_template)
+
+# Step 6: Feed the extracted text and knowledge base into the chain and get the output from GPT-4
+output = chain.run(text=extracted_text, knowledge_base=knowledge_base)
+print("Processed Text:", output)
