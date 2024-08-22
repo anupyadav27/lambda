@@ -1,10 +1,9 @@
 import pytesseract
 from PIL import Image
-from langchain.agents import initialize_agent, Tool
-from langchain.chat_models import ChatOpenAI
+from langchain import LLMChain  # Correct import for LLMChain
+from langchain.chat_models import ChatOpenAI  # Correct import for ChatOpenAI
 from langchain.prompts import PromptTemplate
 from decouple import config
-import openai
 import os
 
 # Step 1: Load your image
