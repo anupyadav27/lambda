@@ -44,6 +44,8 @@ Detail how security is integrated into the architecture, including IAM roles, VP
 Explain how the architecture is designed to scale based on demand.
 Explain how performance will be monitored and optimized.
 Deployment Strategy: Provide a clear and detailed deployment strategy ans steps which need to be used by engineers to setup, deployment and config. 
+Task List to deploy these architecture with brief discriptions of each task and efforts 
+
 Environment Considerations: Describe the differences, if any, between production and non-production environments. Include considerations for cost optimization in non-production environments and any specific configurations that differ from production.
 
 
