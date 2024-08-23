@@ -1,37 +1,40 @@
-You are tasked with creating a detailed Cloud Infrastructure Architecture document for deploying the Dataiku application within AWS. The document should cover deployment, governance, and security controls, ensuring alignment with AWS's six-pillar architecture principles: Operational Excellence, Security, Reliability, Performance Efficiency, Cost Optimization, and Sustainability.
+You are tasked with creating a detailed Cloud Infrastructure Architecture document for deploying the cloud Infra architecture for a application within AWS cloud. The document should cover deployment, governance, and security controls, ensuring alignment with AWS's six-pillar architecture principles: Operational Excellence, Security, Reliability, Performance Efficiency, Cost Optimization, and Sustainability.
 
-The document should begin with the "Solution Summary" section and exclude the "Objective" section from the final output.
+The document should include the below section and each section has the some coments to decide what need to be insluded in that section . need notto keep the those in main section heading. 
 
-Sections to Include:
-Solution Summary
+
+
+1) Solution Summary
 
 Purpose: Why is this solution needed? What are the key benefits?
 Architecture Overview: Provide a brief summary of the proposed architecture and its alignment with AWS principles.
 Key Functionality/Capability
 
-Core Functions: What are the main functionalities of the application?
+2) Core Functions: What are the main functionalities of the application?
 Infrastructure Support: What key infrastructure capabilities are required to support these functions?
-Assumptions/Constraints/Recommendations
+3) Assumptions/Constraints/Recommendations
 
 Assumptions: What assumptions were made during design?
 Constraints: Identify any limitations or constraints of the solution.
 Recommendations: Provide recommendations for scalability, security, and performance.
-Solution Requirements
 
-User Access: What are the user access requirements? Specify IAM roles needed.
-Interfaces: What systems or APIs will interface with this application?
-Security: What are the key security requirements? Focus on user access and data protection.
-Networking: Specify any required VPC endpoints or connectivity needs.
-Software: List required software components, including databases.
-Performance: Outline performance considerations and monitoring strategies.
-Support: What support is needed for deployment and ongoing operations?
-Storage & Database: What are the storage and database needs? Include key metrics like IOPS.
-Disaster Recovery: What is the DR strategy? Define RPO and RTO.
-Compliance & Licensing: Note any compliance requirements and necessary licenses.
-Proposed Solution
+4) Solution Requirements
 
-Current Architecture: Provide a brief description if applicable.
-New Architecture:
+4.1) User Access: What are the user access requirements? Specify IAM roles needed.
+4.2) Interfaces: What systems or APIs will interface with this application?
+4.3) Security: What are the key security requirements? Focus on user access and data protection.
+4.4) Networking: Specify any required VPC endpoints or connectivity needs.
+4.5) Software: List required software components, including databases.
+4.6) Performance: Outline performance considerations and monitoring strategies.
+4.7) Support: What support is needed for deployment and ongoing operations?
+4.8) Storage & Database: What are the storage and database needs? Include key metrics like IOPS.
+4.9) Disaster Recovery: What is the DR strategy? Define RPO and RTO.
+4.10) Compliance & Licensing: Note any compliance requirements and necessary licenses.
+
+5) Proposed Solution
+
+5.1) Current Architecture: Provide a brief description if applicable.
+5.2) Proposed Architecture deatils :
 Detailed Description: Provide a comprehensive and detailed description of the proposed architecture. Explain how the architecture meets the needs of the application while adhering to AWS's six-pillar principles.
 Component Overview: Describe each component involved in the architecture, including Dataiku management servers, EKS clusters, ELB, and any other relevant AWS services. Explain how each component interacts with the others.
 High Availability: Explain the high availability setup, including whether it is built into the AWS services (e.g., EKS, ELB) or configured separately. Describe why high availability is important for this solution and how it is achieved.
@@ -40,13 +43,6 @@ Scalability and Performance: Explain how the architecture is designed to scale b
 Deployment Strategy: Provide a clear and detailed deployment strategy. Explain the steps involved in deploying the architecture, including the setup of EKS clusters, configuration of Dataiku management servers, integration with ELB, and any automation or CI/CD pipelines that will be used.
 Environment Considerations: Describe the differences, if any, between production and non-production environments. Include considerations for cost optimization in non-production environments and any specific configurations that differ from production.
 Diagram and Visualization: Include a conceptual diagram or visualization to illustrate the architecture, showing how components are connected, data flows between them, and how different AWS services are utilized.
-Audience Consideration:
-Ensure that the explanation in the "Proposed Solution" section is detailed enough for technical audiences, including application architects, cloud engineers, DevOps teams, server management teams, and subject matter experts (SMEs). Provide enough context so that each team understands their role in the deployment and management of the architecture. This includes:
 
-Application Architects: Focus on how the architecture supports the application’s functional and non-functional requirements.
-Cloud Engineers: Detail the cloud infrastructure components and how they are configured and connected.
-DevOps Teams: Outline the CI/CD processes, automation, and deployment strategies.
-Server Management Teams: Discuss server configurations, management practices, and ongoing maintenance.
-SMEs: Include considerations for security, compliance, performance, and any specific domain expertise needed.
-Miscellaneous Information
-Include any other relevant details not covered in the sections above.
+
+Ensure that the explanation in the "Proposed Solution" section is detailed enough for technical audiences, including application architects, cloud engineers, DevOps teams, server management teams, and subject matter experts (SMEs). Provide enough context so that each team understands this architecture in details. 
