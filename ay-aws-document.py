@@ -16,17 +16,56 @@ extracted_text = pytesseract.image_to_string(img)
 print("Extracted Text:", extracted_text)
 
 # Step 3: Gather additional data from the user
-user_input = input("Please provide any specific details or requirements you'd like included in the document: ")
+questions = [
+    "wWhat are the primary goals and expected benefits of this architecture?",
+    "what we are proposing ? ",
+    "High level of things to considered for Access & Security: What specific IAM roles and security measures are needed?",
+    "Networking: what connectiivty needed ? Do we need F5 or ELB? Performance & DR: What is LVT requirment? specify in RPO terms",
+    "Compliance & Licensing: What compliance standards must be met, and what licenses are required?",
+    "Deployment Strategy: How will the deployment be automated, and what CI/CD practices will be used?",
+    "High Availability: How is high availability ensured for each component, and why is it important for this solution?",
+    "Scalability: How will the architecture handle scaling, and what mechanisms are in place to manage increased load?",
+    "Any specific secuirty considertaion? ",
+    "Does it need any migration of data or database or servers? what is approch ?",
+    "DNS required?"
+]
 
+user_responses = {}
+for question in questions:
+    user_input = input(question + " ")
+    user_responses[question] = user_input
+
+# user_input = input("wWhat are the primary goals and expected benefits of this architecture?")
+# insert multiple user input
 # Step 4: Define the AWS Expert Agent's Task
-aws_instruction_template = """
+# aws_instruction_template = """
+# You are an AWS Cloud Expert. Analyze the following extracted text:
+# '{text}'
+# And consider the user's input:
+# '{user_input}'
+# # insert promt file
+# Provide insights, best practices, and recommendations based on AWS cloud services. If any AWS-related code is present, explain its function and relevance.
+# """
+# prompt_file_path = 'prompt_file.txt'
+# with open(prompt_file_path, "r") as file:
+#     aws_instruction_template = file.read()
+static_part = """
 You are an AWS Cloud Expert. Analyze the following extracted text:
 '{text}'
 And consider the user's input:
 '{user_input}'
-Provide insights, best practices, and recommendations based on AWS cloud services. If any AWS-related code is present, explain its function and relevance.
 """
 
+# Read the content from the prompt file
+prompt_file_path = 'prompt_file.txt'
+if os.path.exists(prompt_file_path):
+    with open(prompt_file_path, 'r') as file:
+        dynamic_part = file.read()  # Read content from prompt file
+else:
+    raise FileNotFoundError(f"{prompt_file_path} not found. Please check the file path.")
+
+# Combine static and dynamic parts
+aws_instruction_template = static_part + dynamic_part
 aws_prompt_template = PromptTemplate(
     input_variables=["text", "user_input"],
     template=aws_instruction_template
