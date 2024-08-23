@@ -1,8 +1,8 @@
 You are tasked with creating a detailed Cloud Infrastructure Architecture document for deploying the cloud Infra architecture for a application within AWS cloud. The document should cover deployment, governance, and security controls, ensuring alignment with AWS's six-pillar architecture principles: Operational Excellence, Security, Reliability, Performance Efficiency, Cost Optimization, and Sustainability.
 
-The document should include the below section and each section has the some coments to decide what need to be insluded in that section . need notto keep the those in main section heading. 
+Note, Ensure that the explanation in the "Proposed Solution" section is detailed enough for technical audiences, including application architects, cloud engineers, DevOps teams, server management teams, and subject matter experts (SMEs). Provide enough context so that each team understands this architecture in details. 
 
-
+The document should include the below section and each section has the some coments to decide what need to be insluded in that section . Feel free to add the relevent sections or add any new subsection in existing heading if required 
 
 1) Solution Summary
 
@@ -35,14 +35,16 @@ Recommendations: Provide recommendations for scalability, security, and performa
 
 5.1) Current Architecture: Provide a brief description if applicable.
 5.2) Proposed Architecture deatils :
-Detailed Description: Provide a comprehensive and detailed description of the proposed architecture. Explain how the architecture meets the needs of the application while adhering to AWS's six-pillar principles.
-Component Overview: Describe each component involved in the architecture, including Dataiku management servers, EKS clusters, ELB, and any other relevant AWS services. Explain how each component interacts with the others.
-High Availability: Explain the high availability setup, including whether it is built into the AWS services (e.g., EKS, ELB) or configured separately. Describe why high availability is important for this solution and how it is achieved.
-Security and Compliance: Detail how security is integrated into the architecture, including IAM roles, VPC configurations, and data protection mechanisms. Discuss how the architecture meets any compliance requirements.
-Scalability and Performance: Explain how the architecture is designed to scale based on demand. Include details on auto-scaling for EKS pods, load balancing with ELB, and how performance will be monitored and optimized.
-Deployment Strategy: Provide a clear and detailed deployment strategy. Explain the steps involved in deploying the architecture, including the setup of EKS clusters, configuration of Dataiku management servers, integration with ELB, and any automation or CI/CD pipelines that will be used.
+Detailed Description: Provide a comprehensive and detailed description of the proposed architecture. 
+Explain how the architecture meets the needs of the application while adhering to AWS's six-pillar principles.
+Also include the Component used and how they are being configured for this archietcture. 
+Overview: Describe each component involved in the architecture and any other relevant AWS services like IAM  etc. Explain how each component interacts with the others.
+Describe why high availability is important for this solution and how it is achieved.Explain how the high availability acheived in this setup if required, including whether it is in built into the AWS services (e.g., EKS, ELB,bedroack, s3 etc ) or configured separately. 
+Detail how security is integrated into the architecture, including IAM roles, VPC configurations, and data protection mechanisms. Discuss how the architecture meets any compliance requirements.
+Explain how the architecture is designed to scale based on demand.
+Explain how performance will be monitored and optimized.
+Deployment Strategy: Provide a clear and detailed deployment strategy ans steps which need to be used by engineers to setup, deployment and config. 
 Environment Considerations: Describe the differences, if any, between production and non-production environments. Include considerations for cost optimization in non-production environments and any specific configurations that differ from production.
-Diagram and Visualization: Include a conceptual diagram or visualization to illustrate the architecture, showing how components are connected, data flows between them, and how different AWS services are utilized.
 
 
-Ensure that the explanation in the "Proposed Solution" section is detailed enough for technical audiences, including application architects, cloud engineers, DevOps teams, server management teams, and subject matter experts (SMEs). Provide enough context so that each team understands this architecture in details. 
+
